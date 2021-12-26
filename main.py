@@ -16,31 +16,7 @@ class imageManipulator:
     return newImage
 
   def changeTo_9Bit(self, show=False):
-    '''
-      colors 
-
-      "red":(255,0,0)
-      "green":(0,255,0)
-      "blue":(0,0,255)
-      "cyan":(0,255,255)
-      "magenta":(255,0,255)
-      "yellow":(255,255,0)
-      "black":(0,0,0)
-      "white":(255,255,255)
-    '''
-
-    pickBin3 = lambda x: 0 if x < 128 else 255
-
-    def pickBin6(x):
-      if x < 43:
-        return 0
-      elif x >= 43 and x < 128:
-        return 85
-      elif x >= 128 and x < 216:
-        return 171
-      else:
-        return 255
-
+    
     def pickBin9(x):
       if x < 18:
         return 0
@@ -63,6 +39,32 @@ class imageManipulator:
       for j in range(0,self.height):
         pxl_color = self.currentImage.getpixel((i,j))
         new_pxl_color = (pickBin9(pxl_color[0]), pickBin9(pxl_color[1]), pickBin9(pxl_color[2]))
+        self.currentImage.putpixel((i,j),new_pxl_color)
+
+  def denoiseImage(self):
+    def mostFrequentTuple(lst):
+      lst = [str(i) for i in lst]
+      counter = 0
+      num = lst[0]
+      for i in lst:
+          curr_frequency = lst.count(i)
+          if(curr_frequency> counter):
+              counter = curr_frequency
+              num = i
+  
+      return tuple(num)
+
+
+
+    sampleArea = 2
+    for i in range(0,self.width):
+      for j in range(0,self.height):
+        tuple_list = list()
+        for x in range(-sampleArea,sampleArea+1):
+          for y in range(-sampleArea,sampleArea+1):
+            if x >= 0 and y >= 0 and x <= self.width and y <= self.height:
+              tuple_list.append(self.currentImage.getpixel((i,j)))
+        new_pxl_color = mostFrequentTuple(tuple_list)
         self.currentImage.putpixel((i,j),new_pxl_color)
 
 if __name__ == "__main__":
