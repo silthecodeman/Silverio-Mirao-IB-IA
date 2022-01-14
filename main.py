@@ -1,5 +1,6 @@
 import PIL
 from PIL import Image as openImage
+from random import randint
 class imageManipulator:
   
   def __init__(self, path):
@@ -43,20 +44,25 @@ class imageManipulator:
 
   def denoiseImage(self):
     def mostFrequentTuple(lst):
-      lst = [str(i) for i in lst]
-      counter = 0
-      num = lst[0]
+      res_dic = {}
       for i in lst:
-          curr_frequency = lst.count(i)
-          if(curr_frequency> counter):
-              counter = curr_frequency
-              num = i
-  
-      return tuple(num)
+        if i not in res_dic:
+          res_dic[i] = 0
+      for j in lst:
+        res_dic[j] += 1
+      
+      most_common = 0
+      for i in res_dic:
+        if res_dic[i] > most_common:
+          most_common = res_dic[i]
+        else:
+          del res_dic[i]
+        
+      pt1 = [i for i in res_dic][randint(0, len(res_dic)-1)]
+      return tuple([int(i) for i in pt1[1:][:-1].split(', ')])
+      
 
-
-
-    sampleArea = 2
+    sampleArea = 20
     for i in range(0,self.width):
       for j in range(0,self.height):
         tuple_list = list()
@@ -64,10 +70,12 @@ class imageManipulator:
           for y in range(-sampleArea,sampleArea+1):
             if x >= 0 and y >= 0 and x <= self.width and y <= self.height:
               tuple_list.append(self.currentImage.getpixel((i,j)))
-        new_pxl_color = mostFrequentTuple(tuple_list)
+        new_pxl_color = mostFrequentTuple([str(i) for i in tuple_list])
         self.currentImage.putpixel((i,j),new_pxl_color)
+
 
 if __name__ == "__main__":
   myImage = imageManipulator('Images/spongebob.jpg')
   myImage.changeTo_9Bit()
+  myImage.denoiseImage()
   myImage.currentImage.show()
