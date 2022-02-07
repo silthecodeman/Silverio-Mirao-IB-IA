@@ -1,7 +1,6 @@
 from pick_bins import pickBin6, pickBin9
 from denoising import get_average_color
 from PIL import Image as openImage
-
 class imageManipulator:
   
   def __init__(self, path):
@@ -25,7 +24,28 @@ class imageManipulator:
     #pprint.pprint(all_pixels, width=1)
     return all_pixels
 
-  def replace_uncommon(self, repl_color=(100,64,0), perc_float=3):
+  def get_neiboring_colors(self, img):
+    cords = []
+    for i in range(0,self.width):
+      for j in range(0,self.height):
+        pxl_color = img.getpixel((i,j))  
+        direcs = {"up":(0,1), "down":(0,-1), "left":(1,0), "right":(-1,0)}
+
+        for direc in direcs.items():
+          label = direc[0]
+          hor, vert = direc[1]
+          try:
+            pxl = img.getpixel((i+hor,j+vert))
+            if pxl != pxl_color:
+              cordinate = ((i + abs(i - (i + hor))),(j + abs(j - (j + vert))))
+              cords.append(str(cordinate))
+          except Exception as e:
+            pass
+
+    return tuple(set(cords))
+
+
+  def replace_uncommon(self, repl_color=(200,200,200), perc_float=3):
     pixels_amt = self.pixel_ratio(self.currentImage)
     bad_pixels = dict()
 
@@ -66,11 +86,33 @@ class imageManipulator:
         newImage.putpixel((i,j),color)
     self.currentImage = newImage
   
+  def get_cords_lst(self, img):
+    lst = list()
+    for i in self.get_neiboring_colors(img):
+      cord = [int(j) for j in i.replace("(","").replace(")","").replace(" ","").split(",")]
+      x_y = [cord[0],0]
+
+      if self.height/2 > cord[1]:
+        x_y[1] = abs(cord[1] -  self.height)
+      else:
+        x_y[1] =  abs(self.height - cord[1])
+
+      lst.append(tuple(x_y))
+
+    return lst
+
+def main_process_get_cords(path, binP, rad, perc):
+  myImage = imageManipulator(path)
+  print(f"""
+        Area: {myImage.pxl_area}\n
+        Width: {myImage.width}\n
+        Height = {myImage.height}\n
+        Center = ({myImage.width/2},{myImage.height/2})
+        """)
+  myImage.changeTo_Bit(bin_pal=binP)
+  myImage.denoiseImage(radius=rad)
+  myImage.replace_uncommon(perc_float=perc)
+  return myImage.get_cords_lst(myImage.currentImage)
 
 if __name__ == "__main__":
-  myImage = imageManipulator('../Images/homer.jpg')
-  print(myImage.height * myImage.width)
-  myImage.changeTo_Bit(bin_pal=6)
-  myImage.denoiseImage(radius=5)
-  myImage.replace_uncommon(perc_float=3.00)
-  myImage.currentImage.show()
+  cords = main_process_get_cords("../Images/spongebob.jpg", 6, 7, 2.00) #path to image, bit change, radius of denoising, percent of uncommons to replace
