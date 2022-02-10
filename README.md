@@ -1,5 +1,7 @@
 # IB Mathematics II 2021-22 IA - Silverio Mirao 
 
+This project was created wtih the intent of taking a two-dimensional pixelated image with simple two-dimensional features, such as a cartoon character or shape, and systematically creating a set of lines that when graphed, can attempt to recreate or resemble the outline of the image.
+
 ## Installation MacOs/LinuxOS
 ```bash
 git clone "https://github.com/silthecodeman/Silverio-Mirao-IB-IA.git"
