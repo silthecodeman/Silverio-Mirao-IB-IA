@@ -115,4 +115,4 @@ def main_process_get_cords(path, binP, rad, perc):
   return myImage.get_cords_lst(myImage.currentImage)
 
 if __name__ == "__main__":
-  cords = main_process_get_cords("../Images/spongebob.jpg", 6, 7, 2.00) #path to image, bit change, radius of denoising, percent of uncommons to replace
+  cords = main_process_get_cords("../Images/homer.jpg", 6, 7, 2.00) #path to image, bit change, radius of denoising, percent of uncommons to replace
