@@ -2,6 +2,11 @@
 
 This project was created wtih the intent of taking a two-dimensional pixelated image with simple two-dimensional features, such as a cartoon character or shape, and systematically creating a set of lines that when graphed, can attempt to recreate or resemble the outline of the image.
 
+## Prerequisites (download via apt, brew etc.)
+  - python3
+  - python3-venv
+  - git
+
 ## Installation MacOs/LinuxOS
 ```bash
 git clone "https://github.com/silthecodeman/Silverio-Mirao-IB-IA.git"
