@@ -16,6 +16,7 @@ def show_values(cords):
 
 if __name__ == "__main__":
   cords = main_process_get_cords("../Images/scoobydoo.png", 6, 7, 2.00) #path to image, bit change (6,9), radius of denoising (7,5,3), percent of uncommons to replace
-  print('seperation started')
-  print(f'length of cords: {len(cords)}')
-  print(seperate_cords(cords))
+  show_values(cords)
+  #print('seperation started')
+  #print(f'length of cords: {len(cords)}')
+  #print(seperate_cords(cords))

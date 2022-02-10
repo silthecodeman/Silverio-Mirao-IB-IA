@@ -103,6 +103,7 @@ class imageManipulator:
 
 def main_process_get_cords(path, binP, rad, perc):
   myImage = imageManipulator(path)
+  myImage.currentImage.show()
   print(f"""
         Area: {myImage.pxl_area}\n
         Width: {myImage.width}\n
